@@ -5,6 +5,7 @@ type Query {
 
 type Mutation {
   createMember(data: MemberCreationInput!): MemberCreationMessage!
+  createPosition(title: String!): PositionCreationMessage!
 }
 
 #type Subscription {
@@ -34,4 +35,8 @@ type Member {
   _id: ID!
   secret: String!
   year: Int!
+}
+
+type PositionCreationMessage {
+  _id: ID!
 }
