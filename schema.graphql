@@ -1,9 +1,31 @@
 type Query {
-  me: String!
+  loginDeveloper(data: DeveloperLoginInput): AuthData!
 }
 
-#type Mutation {
-#}
+type Mutation {
+  createMember(data: MemberCreationInput!): MemberCreationMessage!
+}
 
 #type Subscription {
 #}
+
+input DeveloperLoginInput {
+  email: String!
+  password: String!
+}
+
+input MemberCreationInput {
+  name: String!
+  secret: String!
+  year: Int!
+}
+
+type MemberCreationMessage {
+  _id: ID!
+}
+
+type AuthData {
+  _id: String!
+  token: String!
+  expiresIn: Int!
+}
