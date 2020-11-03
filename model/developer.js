@@ -24,21 +24,4 @@ developerSchema.pre("save", async function (next) {
   next();
 });
 
-/*
-developerSchema.post("findOne", function (doc, next) {
-  console.log(doc);
-  next();
-});
-
-developerSchema.pre("findOne", async function (next) {
-  const condition = this.getFilter();
-  this.setQuery({
-    ...condition,
-    password: await bcrypt.hash(condition.password, 10),
-  });
-  console.log(this.getFilter());
-  next();
-});
-*/
-
 module.exports = mongoose.model("Developer", developerSchema);
