@@ -1,7 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
 import Developer from "../model/developer";
+import Member from "../model/member";
+import getUserData from "../middleware/auth";
+
 const Query = {
   loginDeveloper: async (parent, { data: { email, password } }, ctx, info) => {
     try {
@@ -23,6 +25,17 @@ const Query = {
       console.log(err.message);
       throw err;
     }
+  },
+
+  getAllMembers: async (parent, args, { request }, info) => {
+    const userData = getUserData(request);
+
+    if (userData.category !== "developer") {
+      throw new Error("only developer can view member's details.");
+    }
+
+    const members = Member.find();
+    return members;
   },
 };
 

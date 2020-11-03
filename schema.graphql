@@ -1,5 +1,6 @@
 type Query {
   loginDeveloper(data: DeveloperLoginInput): AuthData!
+  getAllMembers: [Member!]!
 }
 
 type Mutation {
@@ -24,7 +25,13 @@ type MemberCreationMessage {
 }
 
 type AuthData {
-  _id: String!
+  _id: ID!
   token: String!
   expiresIn: Int!
+}
+
+type Member {
+  _id: ID!
+  secret: String!
+  year: Int!
 }
