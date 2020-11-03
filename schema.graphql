@@ -15,7 +15,6 @@ input DeveloperLoginInput {
 }
 
 input MemberCreationInput {
-  name: String!
   secret: String!
   year: Int!
 }

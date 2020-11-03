@@ -28,6 +28,7 @@ mongoose
   .connect(process.env.mongodb_url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
   })
   .then((_) => {
     Developer.find().then((isSuper) => {

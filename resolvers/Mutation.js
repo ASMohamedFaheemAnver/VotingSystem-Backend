@@ -1,12 +1,26 @@
 import Member from "../model/member";
+import getUserData from "../middleware/auth";
 
 const Mutation = {
   createMember: async (
     parent,
-    { data: { name, secret, year } },
-    ctx,
+    { data: { secret, year } },
+    { request },
     info
-  ) => {},
+  ) => {
+    try {
+      const userData = getUserData(request);
+      if (userData.category !== "developer") {
+        throw new Error("only developer can add new member.");
+      }
+      const newMember = new Member({ secret, year });
+      await newMember.save();
+      return newMember;
+    } catch (err) {
+      console.log(err.message);
+      throw err;
+    }
+  },
 };
 
 export { Mutation as default };
