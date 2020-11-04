@@ -24,13 +24,20 @@ voteSchema.pre("save", async function (next) {
 
   const voter = await Member.findById(vote.from).populate("admin");
   const reciver = await Member.findById(vote.to);
+
   if (
     voter.admin.is_first_poll_enabled &&
     !voter.admin.is_second_poll_enabled
   ) {
     // console.log(voter.first_poll.votes);
+    if (voter.first_poll.is_voted) {
+      return next(new Error("member already voted."));
+    }
     this.meta = "first";
     voter.first_poll.votes.push(this);
+    if (vote.$is_final) {
+      voter.first_poll.is_voted = true;
+    }
     reciver.first_poll.received_votes.push(this);
     await voter.save();
     await reciver.save();
@@ -39,8 +46,14 @@ voteSchema.pre("save", async function (next) {
     voter.admin.is_second_poll_enabled &&
     reciver.is_eligible
   ) {
+    if (voter.second_poll.is_voted) {
+      return next(new Error("member already voted."));
+    }
     this.meta = "second";
     voter.second_poll.votes.push(this);
+    if (vote.$is_final) {
+      voter.second_poll.is_voted = true;
+    }
     reciver.second_poll.received_votes.push(this);
     await voter.save();
     await reciver.save();

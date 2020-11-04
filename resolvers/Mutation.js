@@ -54,7 +54,7 @@ const Mutation = {
     return position;
   },
 
-  createVote: async (parent, { data }, { request }, info) => {
+  createVotes: async (parent, { data }, { request }, info) => {
     const userData = getUserData(request);
     if (userData.category !== "member") {
       throw new Error("only member can vote.");
@@ -76,20 +76,21 @@ const Mutation = {
     const votes = [];
     for (let i = 0; i < data.length; i++) {
       const vote = new Vote({
-        position: position,
-        to: to,
+        position: data[i].position,
+        to: data[i].to,
         from: userData.encryptedId,
         meta: "undefined",
       });
 
-      const existingVote = await Vote.findOne({
-        position: vote.position,
-        from: vote.from,
-      });
-      if (existingVote) {
-        throw new Error("already voted for this position.");
-      }
-
+      /* offline check made */
+      // const existingVote = await Vote.findOne({
+      //   position: vote.position,
+      //   from: vote.from,
+      // });
+      // if (existingVote) {
+      //   throw new Error("already voted for this position.");
+      // }
+      vote.$is_final = i === data.length - 1 ? true : false;
       await vote.save();
       votes.push(vote);
     }

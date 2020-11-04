@@ -74,10 +74,13 @@ const Query = {
 
     const gPosition = await Position.findById(position);
     let members;
-    if (gPosition.gender === "M" || gPosition.gender === "M") {
+    if (
+      gPosition.eligible_gender.toString() === "M" ||
+      gPosition.eligible_gender.toString() === "F"
+    ) {
       members = await Member.find({
         year: gPosition.eligible_year,
-        gender: gPosition.gender,
+        gender: gPosition.eligible_gender,
       });
     } else {
       members = await Member.find({
