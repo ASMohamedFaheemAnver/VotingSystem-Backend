@@ -28,11 +28,13 @@ const memberSchema = new Schema({
 memberSchema.pre("save", async function (next) {
   const member = this;
 
-  const currentYear = new Date().getFullYear();
-  console.log({ secret: member.secret, currentYear: currentYear });
+  // const currentYear = new Date().getFullYear();
+  console.log({ secret: member.secret, currentYear: member.year });
   if (
-    member.year >= currentYear - 4 &&
-    member.year < currentYear &&
+    // member.year >= currentYear - 4 &&
+    // member.year < currentYear &&
+    member.year > 0 &&
+    member.year <= 4 &&
     member.secret.length === 10
   ) {
     return next();

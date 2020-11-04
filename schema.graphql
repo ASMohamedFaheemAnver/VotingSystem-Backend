@@ -8,7 +8,7 @@ type Query {
 type Mutation {
   createMember(data: MemberCreationInput!): MemberCreationMessage!
   createPosition(data: PositionCreationInput!): PositionCreationMessage!
-  createVote(data: VoteCreationInput!): VoteCreationMessage!
+  createVote(data: [VoteCreationInput!]!): [VoteCreationMessage!]!
 }
 
 #type Subscription {

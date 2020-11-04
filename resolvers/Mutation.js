@@ -45,29 +45,46 @@ const Mutation = {
     return position;
   },
 
-  createVote: async (parent, { data: { position, to } }, { request }, info) => {
+  createVote: async (parent, { data }, { request }, info) => {
     const userData = getUserData(request);
     if (userData.category !== "member") {
       throw new Error("only member can vote.");
     }
 
-    const vote = new Vote({
-      position: position,
-      to: to,
-      from: userData.encryptedId,
-      meta: "undefined",
-    });
-
-    const existingVote = await Vote.findOne({
-      position: vote.position,
-      from: vote.from,
-    });
-    if (existingVote) {
-      throw new Error("already voted for this position.");
+    for (let i = 0; i < data.length; i++) {
+      const vote = data[i];
+      for (let j = i + 1; j < data.length; j++) {
+        if (vote.position.toString() === data[j].position.toString()) {
+          throw new Error("duplicate votes are detected!");
+        }
+      }
     }
 
-    await vote.save();
-    return vote;
+    if (data.length < 7) {
+      throw new Error("should vote all positions.");
+    }
+
+    const votes = [];
+    for (let i = 0; i < data.length; i++) {
+      const vote = new Vote({
+        position: position,
+        to: to,
+        from: userData.encryptedId,
+        meta: "undefined",
+      });
+
+      const existingVote = await Vote.findOne({
+        position: vote.position,
+        from: vote.from,
+      });
+      if (existingVote) {
+        throw new Error("already voted for this position.");
+      }
+
+      await vote.save();
+      votes.push(vote);
+    }
+    return votes;
   },
 };
 
