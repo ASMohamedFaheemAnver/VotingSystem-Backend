@@ -49,6 +49,7 @@ const Mutation = {
       position: position,
       to: to,
       from: userData.encryptedId,
+      meta: "undefined",
     });
 
     const existingVote = await Vote.findOne({
