@@ -12,11 +12,18 @@ const developerSchema = new Schema({
     type: String,
     required: true,
   },
+  is_first_poll_enabled: {
+    type: Boolean,
+    default: false,
+  },
+  is_second_poll_enabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 developerSchema.pre("save", async function (next) {
   const developer = this;
-  console.log(this.$msg);
   if (developer.password.length < 8) {
     next(new Error("password should be atleast 8 charecters."));
   }

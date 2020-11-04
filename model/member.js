@@ -1,9 +1,10 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
 const memberSchema = new Schema({
   year: { type: Number, required: true },
+  admin: { type: Schema.Types.ObjectId, ref: "Developer" },
   secret: {
     type: String,
     required: true,
@@ -31,9 +32,9 @@ memberSchema.pre("save", async function (next) {
     member.year < currentYear &&
     member.secret.length === 10
   ) {
-    next();
+    return next();
   } else {
-    next(new Error("your secret length not enough or year is invalid."));
+    return next(new Error("your secret length not enough or year is invalid."));
   }
 });
 

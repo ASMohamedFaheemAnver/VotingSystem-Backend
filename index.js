@@ -35,7 +35,6 @@ mongoose
           email: "jstrfaheem065@gmail.com",
           password: "password",
         });
-        developer.$msg = "msg";
         developer.save().catch((err) => {
           console.log(err.message);
         });

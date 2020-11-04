@@ -1,6 +1,7 @@
 import getUserData from "../middleware/auth";
 import Member from "../model/member";
 import Position from "../model/position";
+import Vote from "../model/vote";
 
 const Mutation = {
   createMember: async (
@@ -14,7 +15,11 @@ const Mutation = {
       if (userData.category !== "developer") {
         throw new Error("only developer can add new member.");
       }
-      const newMember = new Member({ secret, year });
+      const newMember = new Member({
+        secret,
+        year,
+        admin: userData.encryptedId,
+      });
       await newMember.save();
       return newMember;
     } catch (err) {
@@ -32,6 +37,30 @@ const Mutation = {
     const position = new Position({ title });
     await position.save();
     return position;
+  },
+
+  createVote: async (parent, { data: { position, to } }, { request }, info) => {
+    const userData = getUserData(request);
+    if (userData.category !== "member") {
+      throw new Error("only member can vote.");
+    }
+
+    const vote = new Vote({
+      position: position,
+      to: to,
+      from: userData.encryptedId,
+    });
+
+    const existingVote = await Vote.findOne({
+      position: vote.position,
+      from: vote.from,
+    });
+    if (existingVote) {
+      throw new Error("already voted for this position.");
+    }
+
+    await vote.save();
+    return vote;
   },
 };
 

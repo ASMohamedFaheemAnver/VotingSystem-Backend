@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -13,7 +13,7 @@ const positionSchema = new Schema({
 positionSchema.pre("save", async function (next) {
   const position = this;
   if (position.title.length < 5) {
-    next(new Error("position should be atleast 5 charecters."));
+    return next(new Error("position should be atleast 5 charecters."));
   }
   next();
 });
