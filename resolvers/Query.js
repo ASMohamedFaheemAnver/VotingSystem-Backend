@@ -27,6 +27,28 @@ const Query = {
     }
   },
 
+  loginMember: async (parent, { data: { secret } }, ctx, info) => {
+    try {
+      const member = await Member.findOne({
+        secret: secret,
+      });
+
+      if (member) {
+        const token = jwt.sign(
+          { encryptedId: member._id.toString(), category: "member" },
+          process.env.secret_word,
+          { expiresIn: "10h" }
+        );
+        return { _id: member._id, token: token, expiresIn: 36000 };
+      } else {
+        throw new Error("your entered secret is incorrect.");
+      }
+    } catch (err) {
+      console.log(err.message);
+      throw err;
+    }
+  },
+
   getAllMembers: async (parent, args, { request }, info) => {
     const userData = getUserData(request);
 

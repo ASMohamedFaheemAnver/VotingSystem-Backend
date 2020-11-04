@@ -1,11 +1,13 @@
 type Query {
-  loginDeveloper(data: DeveloperLoginInput): AuthData!
+  loginDeveloper(data: DeveloperLoginInput!): AuthData!
+  loginMember(data: MemberLoginInput!): AuthData!
   getAllMembers: [Member!]!
 }
 
 type Mutation {
   createMember(data: MemberCreationInput!): MemberCreationMessage!
   createPosition(title: String!): PositionCreationMessage!
+  createVote(data: VoteCreationInput!): VoteCreationMessage!
 }
 
 #type Subscription {
@@ -16,9 +18,18 @@ input DeveloperLoginInput {
   password: String!
 }
 
+input MemberLoginInput {
+  secret: String!
+}
+
 input MemberCreationInput {
   secret: String!
   year: Int!
+}
+
+input VoteCreationInput {
+  position: ID!
+  to: ID!
 }
 
 type MemberCreationMessage {
@@ -38,5 +49,9 @@ type Member {
 }
 
 type PositionCreationMessage {
+  _id: ID!
+}
+
+type VoteCreationMessage {
   _id: ID!
 }
