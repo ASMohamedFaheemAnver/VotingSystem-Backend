@@ -28,7 +28,7 @@ voteSchema.pre("save", async function (next) {
     voter.admin.is_first_poll_enabled &&
     !voter.admin.is_second_poll_enabled
   ) {
-    console.log(voter.first_poll.votes);
+    // console.log(voter.first_poll.votes);
     this.meta = "first";
     voter.first_poll.votes.push(this);
     reciver.first_poll.received_votes.push(this);
@@ -55,10 +55,7 @@ voteSchema.pre("findOne", async function (next) {
   if (admin.is_first_poll_enabled && !admin.is_second_poll_enabled) {
     query.meta = "first";
     this.setQuery(query);
-  } else if (
-    !voter.admin.is_first_poll_enabled &&
-    voter.admin.is_second_poll_enabled
-  ) {
+  } else if (!admin.is_first_poll_enabled && admin.is_second_poll_enabled) {
     query.meta = "second";
     this.setQuery(query);
   }

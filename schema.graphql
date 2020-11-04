@@ -2,6 +2,7 @@ type Query {
   loginDeveloper(data: DeveloperLoginInput!): AuthData!
   loginMember(data: MemberLoginInput!): AuthData!
   getAllMembers: [Member!]!
+  getAllMembersByPosition(position: ID!): [Member!]!
 }
 
 type Mutation {
@@ -53,6 +54,7 @@ type Member {
   _id: ID!
   secret: String!
   year: Int!
+  gender: String!
 }
 
 type PositionCreationMessage {

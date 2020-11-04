@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Developer from "../model/developer";
+import Position from "../model/position";
+
 import Member from "../model/member";
 import getUserData from "../middleware/auth";
 
@@ -56,7 +58,32 @@ const Query = {
       throw new Error("only developer can view member's details.");
     }
 
-    const members = Member.find();
+    const members = await Member.find();
+    return members;
+  },
+
+  getAllMembersByPosition: async (parent, { position }, { request }, info) => {
+    const userData = getUserData(request);
+
+    // console.log(userData);
+    if (userData.category !== "developer" && userData.category !== "member") {
+      throw new Error(
+        "only developer or member can view eligible member's details."
+      );
+    }
+
+    const gPosition = await Position.findById(position);
+    let members;
+    if (gPosition.gender === "M" || gPosition.gender === "M") {
+      members = await Member.find({
+        year: gPosition.eligible_year,
+        gender: gPosition.gender,
+      });
+    } else {
+      members = await Member.find({
+        year: gPosition.eligible_year,
+      });
+    }
     return members;
   },
 };

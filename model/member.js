@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Developer from "./developer";
 
 const Schema = mongoose.Schema;
 
@@ -26,17 +27,30 @@ const memberSchema = new Schema({
 
 memberSchema.pre("save", async function (next) {
   const member = this;
-  this.is;
+
   const currentYear = new Date().getFullYear();
   console.log({ secret: member.secret, currentYear: currentYear });
   if (
-    member.year > currentYear - 4 &&
+    member.year >= currentYear - 4 &&
     member.year < currentYear &&
     member.secret.length === 10
   ) {
     return next();
   } else {
     return next(new Error("your secret length not enough or year is invalid."));
+  }
+});
+
+memberSchema.pre("find", async function (next) {
+  const query = this.getFilter();
+  const admin = await Developer.findOne();
+  if (admin.is_first_poll_enabled && !admin.is_second_poll_enabled) {
+  } else if (!admin.is_first_poll_enabled && admin.is_second_poll_enabled) {
+    query.is_eligible = true;
+    this.setQuery(query);
+    return next();
+  } else {
+    return next(new Error("conflict in first poll and second poll."));
   }
 });
 
