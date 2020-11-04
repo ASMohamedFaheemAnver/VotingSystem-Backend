@@ -8,6 +8,14 @@ const positionSchema = new Schema({
     required: true,
     unique: true,
   },
+  eligible_year: {
+    type: Number,
+    required: true,
+  },
+  eligible_gender: {
+    type: String,
+    required: true,
+  },
 });
 
 positionSchema.pre("save", async function (next) {

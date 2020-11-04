@@ -4,6 +4,8 @@ const Schema = mongoose.Schema;
 
 const memberSchema = new Schema({
   year: { type: Number, required: true },
+  gender: { type: String, required: true },
+  is_eligible: { type: Boolean, default: false },
   admin: { type: Schema.Types.ObjectId, ref: "Developer" },
   secret: {
     type: String,

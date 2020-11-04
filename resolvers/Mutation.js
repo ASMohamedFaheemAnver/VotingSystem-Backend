@@ -6,7 +6,7 @@ import Vote from "../model/vote";
 const Mutation = {
   createMember: async (
     parent,
-    { data: { secret, year } },
+    { data: { secret, year, gender } },
     { request },
     info
   ) => {
@@ -19,6 +19,7 @@ const Mutation = {
         secret,
         year,
         admin: userData.encryptedId,
+        gender,
       });
       await newMember.save();
       return newMember;
@@ -28,13 +29,18 @@ const Mutation = {
     }
   },
 
-  createPosition: async (parent, { title }, { request }, info) => {
+  createPosition: async (
+    parent,
+    { data: { title, eligible_year, eligible_gender } },
+    { request },
+    info
+  ) => {
     const userData = getUserData(request);
     if (userData.category !== "developer") {
       throw new Error("only developer can add new member.");
     }
 
-    const position = new Position({ title });
+    const position = new Position({ title, eligible_year, eligible_gender });
     await position.save();
     return position;
   },

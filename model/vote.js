@@ -36,7 +36,8 @@ voteSchema.pre("save", async function (next) {
     await reciver.save();
   } else if (
     !voter.admin.is_first_poll_enabled &&
-    voter.admin.is_second_poll_enabled
+    voter.admin.is_second_poll_enabled &&
+    reciver.is_eligible
   ) {
     this.meta = "second";
     voter.second_poll.votes.push(this);
