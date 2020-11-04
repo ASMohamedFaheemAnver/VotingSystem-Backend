@@ -4,9 +4,9 @@ import Position from "../model/position";
 import Vote from "../model/vote";
 
 const Mutation = {
-  createMember: async (
+  createMembers: async (
     parent,
-    { data: { secret, year, gender } },
+    { data: { number_of_members, year, gender } },
     { request },
     info
   ) => {
@@ -15,14 +15,23 @@ const Mutation = {
       if (userData.category !== "developer") {
         throw new Error("only developer can add new member.");
       }
-      const newMember = new Member({
-        secret,
-        year,
-        admin: userData.encryptedId,
-        gender,
-      });
-      await newMember.save();
-      return newMember;
+      if (number_of_members > 50) {
+        throw new Error("we don't allow more than 50 bult creation.");
+      }
+
+      const members = [];
+      for (let i = 0; i < number_of_members; i++) {
+        const newMember = new Member({
+          secret: Math.random().toString().slice(2, 12),
+          year,
+          admin: userData.encryptedId,
+          gender,
+        });
+        await newMember.save();
+        members.push(newMember);
+      }
+
+      return members;
     } catch (err) {
       console.log(err.message);
       throw err;

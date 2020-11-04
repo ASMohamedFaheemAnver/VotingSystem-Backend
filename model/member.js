@@ -29,7 +29,14 @@ memberSchema.pre("save", async function (next) {
   const member = this;
 
   // const currentYear = new Date().getFullYear();
-  console.log({ secret: member.secret, currentYear: member.year });
+  // console.log(
+  //   member.year > 0 && member.year <= 4 && member.secret.length === 10
+  // );
+  console.log({
+    secret: member.secret,
+    secret_length: member.secret.length,
+    currentYear: member.year,
+  });
   if (
     // member.year >= currentYear - 4 &&
     // member.year < currentYear &&
