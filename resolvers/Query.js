@@ -86,6 +86,18 @@ const Query = {
     }
     return members;
   },
+
+  getAllPositions: async (parent, args, { request }, info) => {
+    const userData = getUserData(request);
+
+    // console.log(userData);
+    if (userData.category !== "developer" && userData.category !== "member") {
+      throw new Error("only developer or member can view available positions.");
+    }
+
+    const positions = await Position.find();
+    return positions;
+  },
 };
 
 export { Query as default };

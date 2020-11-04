@@ -3,6 +3,7 @@ type Query {
   loginMember(data: MemberLoginInput!): AuthData!
   getAllMembers: [Member!]!
   getAllMembersByPosition(position: ID!): [Member!]!
+  getAllPositions: [Position!]!
 }
 
 type Mutation {
@@ -63,4 +64,11 @@ type PositionCreationMessage {
 
 type VoteCreationMessage {
   _id: ID!
+}
+
+type Position {
+  _id: ID!
+  title: String!
+  eligible_year: Int!
+  eligible_gender: String!
 }
