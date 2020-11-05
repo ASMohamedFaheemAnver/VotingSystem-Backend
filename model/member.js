@@ -4,6 +4,7 @@ import Developer from "./developer";
 const Schema = mongoose.Schema;
 
 const memberSchema = new Schema({
+  name: { type: String, required: true },
   year: { type: Number, required: true },
   gender: { type: String, required: true },
   is_eligible: { type: Boolean, default: false },

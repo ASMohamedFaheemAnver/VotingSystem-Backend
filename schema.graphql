@@ -10,7 +10,7 @@ type Query {
 }
 
 type Mutation {
-  createMembers(data: MemberCreationInput!): [MemberCreationMessage!]!
+  createMember(data: MemberCreationInput!): MemberCreationMessage!
   createPosition(data: PositionCreationInput!): PositionCreationMessage!
   createVotes(data: [VoteCreationInput!]!): [VoteCreationMessage!]!
   makeAMemberEligible(_id: ID!): Message!
@@ -34,7 +34,7 @@ input MemberLoginInput {
 }
 
 input MemberCreationInput {
-  number_of_members: Int!
+  name: String!
   year: Int!
   gender: String!
 }
@@ -65,6 +65,7 @@ type Member {
   secret: String!
   year: Int!
   gender: String!
+  name: String!
 }
 
 type MemberWithVoteInfo {
