@@ -13,6 +13,8 @@ type Mutation {
   createMembers(data: MemberCreationInput!): [MemberCreationMessage!]!
   createPosition(data: PositionCreationInput!): PositionCreationMessage!
   createVotes(data: [VoteCreationInput!]!): [VoteCreationMessage!]!
+  makeAMemberEligible(_id: ID!): Message!
+  makeAMemberNotEligible(_id: ID!): Message!
 }
 
 #type Subscription {
@@ -84,4 +86,8 @@ type Position {
 type PollResult {
   position: Position!
   eligible_member_infos: [MemberWithVoteInfo!]!
+}
+
+type Message {
+  msg: String!
 }

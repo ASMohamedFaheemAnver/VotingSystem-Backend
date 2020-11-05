@@ -27,6 +27,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false,
   })
   .then((_) => {
     Developer.find().then((isSuper) => {

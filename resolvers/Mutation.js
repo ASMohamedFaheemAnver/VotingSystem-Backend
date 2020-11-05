@@ -54,6 +54,26 @@ const Mutation = {
     return position;
   },
 
+  makeAMemberEligible: async (parent, { _id }, { request }, info) => {
+    const userData = getUserData(request);
+    if (userData.category !== "developer") {
+      throw new Error("only developer can update a member.");
+    }
+
+    await Member.findOneAndUpdate({ _id: _id }, { is_eligible: true });
+    return { msg: "member updated successfully." };
+  },
+
+  makeAMemberNotEligible: async (parent, { _id }, { request }, info) => {
+    const userData = getUserData(request);
+    if (userData.category !== "developer") {
+      throw new Error("only developer can update a member.");
+    }
+
+    await Member.findOneAndUpdate({ _id: _id }, { is_eligible: false });
+    return { msg: "member updated successfully." };
+  },
+
   createVotes: async (parent, { data }, { request }, info) => {
     const userData = getUserData(request);
     if (userData.category !== "member") {
