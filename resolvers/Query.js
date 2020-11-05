@@ -193,6 +193,67 @@ const Query = {
 
     return pollResults;
   },
+
+  getSecondPollAllResult: async (parent, args, { request }, info) => {
+    const userData = getUserData(request);
+
+    // console.log(userData);
+    if (userData.category !== "developer") {
+      throw new Error("only developer can view poll result.");
+    }
+
+    const positions = await Position.find();
+    // console.log(positions);
+    let pollResults = [];
+
+    for (let i = 0; i < positions.length; i++) {
+      const eligible_member_infos = [];
+
+      let pollResult = {
+        position: positions[i],
+        eligible_member_infos: eligible_member_infos,
+      };
+
+      let members;
+      const gPosition = positions[i];
+      if (
+        gPosition.eligible_gender.toString() === "M" ||
+        gPosition.eligible_gender.toString() === "F"
+      ) {
+        members = await Member.find({
+          year: gPosition.eligible_year,
+          gender: gPosition.eligible_gender,
+          is_eligible: true,
+        });
+      } else {
+        members = await Member.find({
+          year: gPosition.eligible_year,
+        });
+      }
+
+      // console.log(members);
+      let eligible_member_info;
+      // console.log(members.length);
+      for (let j = 0; j < members.length; j++) {
+        const received_vote = await Vote.countDocuments({
+          position: gPosition._id,
+          to: members[j]._id,
+          meta: "second",
+        });
+        eligible_member_info = {
+          member: members[j],
+          vote_recieved: received_vote,
+        };
+        // console.log(eligible_member_info);
+        pollResult.eligible_member_infos.push(eligible_member_info);
+
+        // pollResult.eligible_member_infos.push(eligible_member_info);
+      }
+      pollResults.push(pollResult);
+    }
+
+    return pollResults;
+  },
 };
 
 export { Query as default };

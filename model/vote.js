@@ -57,6 +57,12 @@ voteSchema.pre("save", async function (next) {
     reciver.second_poll.received_votes.push(this);
     await voter.save();
     await reciver.save();
+  } else if (
+    !voter.admin.is_first_poll_enabled &&
+    voter.admin.is_second_poll_enabled &&
+    !reciver.is_eligible
+  ) {
+    return next(new Error("receiver not eligible to vote."));
   } else {
     return next(new Error("conflict in first poll and second poll."));
   }

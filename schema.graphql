@@ -6,6 +6,7 @@ type Query {
   getAllPositions: [Position!]!
   # getFirstPollResult: [PollResult!]!
   getFirstPollAllResult: [PollResult!]!
+  getSecondPollAllResult: [PollResult!]!
 }
 
 type Mutation {
