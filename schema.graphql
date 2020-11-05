@@ -15,6 +15,10 @@ type Mutation {
   createVotes(data: [VoteCreationInput!]!): [VoteCreationMessage!]!
   makeAMemberEligible(_id: ID!): Message!
   makeAMemberNotEligible(_id: ID!): Message!
+  enableFirstPoll: Message!
+  disableFirstPoll: Message!
+  enableSecondPoll: Message!
+  disableSecondPoll: Message!
 }
 
 #type Subscription {

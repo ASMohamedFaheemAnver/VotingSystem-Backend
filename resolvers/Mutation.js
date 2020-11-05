@@ -1,5 +1,6 @@
 import getUserData from "../middleware/auth";
 import Member from "../model/member";
+import Developer from "../model/developer";
 import Position from "../model/position";
 import Vote from "../model/vote";
 
@@ -62,6 +63,58 @@ const Mutation = {
 
     await Member.findOneAndUpdate({ _id: _id }, { is_eligible: true });
     return { msg: "member updated successfully." };
+  },
+
+  enableFirstPoll: async (parent, { _id }, { request }, info) => {
+    const userData = getUserData(request);
+    if (userData.category !== "developer") {
+      throw new Error("only developer can update a member.");
+    }
+
+    await Developer.findOneAndUpdate(
+      { _id: userData.encryptedId },
+      { is_first_poll_enabled: true }
+    );
+    return { msg: "first poll enabled." };
+  },
+
+  enableSecondPoll: async (parent, { _id }, { request }, info) => {
+    const userData = getUserData(request);
+    if (userData.category !== "developer") {
+      throw new Error("only developer can update a member.");
+    }
+
+    await Developer.findOneAndUpdate(
+      { _id: userData.encryptedId },
+      { is_second_poll_enabled: true }
+    );
+    return { msg: "second poll enabled." };
+  },
+
+  disableFirstPoll: async (parent, { _id }, { request }, info) => {
+    const userData = getUserData(request);
+    if (userData.category !== "developer") {
+      throw new Error("only developer can update a member.");
+    }
+
+    await Developer.findOneAndUpdate(
+      { _id: userData.encryptedId },
+      { is_first_poll_enabled: false }
+    );
+    return { msg: "first poll disabled." };
+  },
+
+  disableFirstPoll: async (parent, { _id }, { request }, info) => {
+    const userData = getUserData(request);
+    if (userData.category !== "developer") {
+      throw new Error("only developer can update a member.");
+    }
+
+    await Developer.findOneAndUpdate(
+      { _id: userData.encryptedId },
+      { is_second_poll_enabled: false }
+    );
+    return { msg: "second poll disabled." };
   },
 
   makeAMemberNotEligible: async (parent, { _id }, { request }, info) => {
