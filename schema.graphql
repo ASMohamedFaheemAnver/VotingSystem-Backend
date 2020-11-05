@@ -4,6 +4,8 @@ type Query {
   getAllMembers: [Member!]!
   getAllMembersByPosition(position: ID!): [Member!]!
   getAllPositions: [Position!]!
+  # getFirstPollResult: [PollResult!]!
+  getFirstPollAllResult: [PollResult!]!
 }
 
 type Mutation {
@@ -58,6 +60,11 @@ type Member {
   gender: String!
 }
 
+type MemberWithVoteInfo {
+  member: Member!
+  vote_recieved: Int!
+}
+
 type PositionCreationMessage {
   _id: ID!
 }
@@ -71,4 +78,9 @@ type Position {
   title: String!
   eligible_year: Int!
   eligible_gender: String!
+}
+
+type PollResult {
+  position: Position!
+  eligible_member_infos: [MemberWithVoteInfo!]!
 }
