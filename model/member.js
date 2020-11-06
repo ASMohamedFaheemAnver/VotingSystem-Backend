@@ -60,7 +60,7 @@ memberSchema.pre("find", async function (next) {
     this.setQuery(query);
     return next();
   } else {
-    return next(new Error("conflict in first poll and second poll."));
+    // return next(new Error("conflict in first poll and second poll."));
   }
 });
 

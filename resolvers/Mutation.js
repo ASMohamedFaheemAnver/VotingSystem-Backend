@@ -105,7 +105,7 @@ const Mutation = {
     return { msg: "first poll disabled." };
   },
 
-  disableFirstPoll: async (parent, { _id }, { request }, info) => {
+  disableSecondPoll: async (parent, { _id }, { request }, info) => {
     const userData = getUserData(request);
     if (userData.category !== "developer") {
       throw new Error("only developer can update a member.");

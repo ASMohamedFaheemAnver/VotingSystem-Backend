@@ -5,6 +5,8 @@ const getUserData = (request, requireAuth = true) => {
     ? request.request.headers.authorization
     : request.connection.context.Authorization;
 
+  // console.log(request.request.headers.authorization);
+
   if (header) {
     const token = header.replace("Bearer ", "");
     const decodedData = jwt.verify(token, process.env.secret_word);
