@@ -103,6 +103,56 @@ const Query = {
     return positions;
   },
 
+  getPollData: async (parent, args, { request }, info) => {
+    const userData = getUserData(request);
+
+    // console.log(userData);
+    if (userData.category !== "developer") {
+      throw new Error("only developer or member can view available positions.");
+    }
+
+    const developer = await Developer.findById(userData.encryptedId);
+    return developer;
+  },
+
+  getMemberVoteData: async (parent, args, { request }, info) => {
+    const userData = getUserData(request);
+
+    // console.log(userData);
+    if (userData.category !== "member") {
+      throw new Error("only member can view available positions.");
+    }
+
+    const member = await Member.findById(userData.encryptedId).populate(
+      "admin"
+    );
+
+    // console.log(member.admin);
+
+    if (
+      member.admin.is_first_poll_enabled &&
+      !member.admin.is_second_poll_enabled
+    ) {
+      return {
+        current: "first",
+        is_voted: member.first_poll.is_voted,
+      };
+    } else if (
+      !member.admin.is_first_poll_enabled &&
+      member.admin.is_second_poll_enabled
+    ) {
+      return {
+        current: "second",
+        is_voted: member.second_poll.is_voted,
+      };
+    } else {
+      return {
+        current: "none",
+        is_voted: false,
+      };
+    }
+  },
+
   /* should learn aggregate in mongoose
   getFirstPollResult: async (parent, args, { request }, info) => {
     const userData = getUserData(request);

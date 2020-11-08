@@ -7,6 +7,8 @@ type Query {
   # getFirstPollResult: [PollResult!]!
   getFirstPollAllResult: [PollResult!]!
   getSecondPollAllResult: [PollResult!]!
+  getPollData: PollData!
+  getMemberVoteData: MemberVoteData!
 }
 
 type Mutation {
@@ -66,6 +68,7 @@ type Member {
   year: Int!
   gender: String!
   name: String!
+  is_eligible: Boolean!
 }
 
 type MemberWithVoteInfo {
@@ -95,4 +98,14 @@ type PollResult {
 
 type Message {
   msg: String!
+}
+
+type PollData {
+  is_first_poll_enabled: Boolean!
+  is_second_poll_enabled: Boolean!
+}
+
+type MemberVoteData {
+  is_voted: Boolean!
+  current: String!
 }
