@@ -1,3 +1,4 @@
+import "@babel/polyfill";
 import { GraphQLServer, PubSub } from "graphql-yoga";
 import Query from "./resolvers/Query";
 import Mutation from "./resolvers/Mutation";
@@ -8,7 +9,7 @@ import Developer from "./model/developer";
 const pubSub = new PubSub();
 
 const server = new GraphQLServer({
-  typeDefs: "./schema.graphql",
+  typeDefs: "./src/schema.graphql",
   resolvers: {
     Query,
     Mutation,
