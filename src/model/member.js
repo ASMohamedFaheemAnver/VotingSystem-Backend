@@ -28,6 +28,10 @@ const memberSchema = new Schema({
 
 memberSchema.pre("save", async function (next) {
   const member = this;
+  const developer = await Developer.findById(member.admin);
+  if (!developer) {
+    return next(new Error("Admin doesn't exist."));
+  }
 
   // const currentYear = new Date().getFullYear();
   // console.log(
