@@ -14,9 +14,9 @@ const voteSchema = new Schema({
 
 voteSchema.pre("save", async function (next) {
   const vote = this;
-  if (vote.from.toString() === vote.to.toString()) {
-    return next(new Error("can't vote to same person."));
-  }
+  // if (vote.from.toString() === vote.to.toString()) {
+  //   return next(new Error("can't vote to same person."));
+  // }
   const position = await Position.findById(vote.position);
   if (!position) {
     return next(new Error("position doesn't eixst."));
@@ -44,7 +44,7 @@ voteSchema.pre("save", async function (next) {
   } else if (
     !voter.admin.is_first_poll_enabled &&
     voter.admin.is_second_poll_enabled &&
-    reciver.is_eligible
+    reciver.eligible_for
   ) {
     if (voter.second_poll.is_voted) {
       return next(new Error("member already voted."));
@@ -60,7 +60,7 @@ voteSchema.pre("save", async function (next) {
   } else if (
     !voter.admin.is_first_poll_enabled &&
     voter.admin.is_second_poll_enabled &&
-    !reciver.is_eligible
+    !reciver.eligible_for
   ) {
     return next(new Error("receiver not eligible to vote."));
   } else {
