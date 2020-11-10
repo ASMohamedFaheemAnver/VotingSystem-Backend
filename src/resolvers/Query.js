@@ -79,14 +79,33 @@ const Query = {
       gPosition.eligible_gender.toString() === "M" ||
       gPosition.eligible_gender.toString() === "F"
     ) {
-      members = await Member.find({
-        year: gPosition.eligible_year,
-        gender: gPosition.eligible_gender,
-      });
+
+
+      const admin = await Developer.findOne();
+      if (admin.is_first_poll_enabled && !admin.is_second_poll_enabled) {
+        members = await Member.find({
+          year: gPosition.eligible_year,
+          gender: gPosition.eligible_gender,
+        });
+      } else if (!admin.is_first_poll_enabled && admin.is_second_poll_enabled) {
+        members = await Member.find({
+          year: gPosition.eligible_year,
+          gender: gPosition.eligible_gender,
+          eligible_for: gPosition._id
+        });
+      }
+
     } else {
-      members = await Member.find({
-        year: gPosition.eligible_year,
-      });
+      if (admin.is_first_poll_enabled && !admin.is_second_poll_enabled) {
+        members = await Member.find({
+          year: gPosition.eligible_year,
+        });
+      } else if (!admin.is_first_poll_enabled && admin.is_second_poll_enabled) {
+        members = await Member.find({
+          year: gPosition.eligible_year,
+          eligible_for: gPosition._id
+        });
+      }
     }
     return members;
   },
@@ -273,7 +292,7 @@ const Query = {
         members = await Member.find({
           year: gPosition.eligible_year,
           gender: gPosition.eligible_gender,
-          is_eligible: true,
+          eligible_for: gPosition._id
         });
       } else {
         members = await Member.find({

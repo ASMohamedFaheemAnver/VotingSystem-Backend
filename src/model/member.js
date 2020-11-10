@@ -7,7 +7,7 @@ const memberSchema = new Schema({
   name: { type: String, required: true },
   year: { type: Number, required: true },
   gender: { type: String, required: true },
-  is_eligible: { type: Boolean, default: false },
+  eligible_for: { type: Schema.Types.ObjectId, ref: "Position" },
   admin: { type: Schema.Types.ObjectId, ref: "Developer" },
   secret: {
     type: String,
@@ -28,6 +28,10 @@ const memberSchema = new Schema({
 
 memberSchema.pre("save", async function (next) {
   const member = this;
+  const developer = await Developer.findById(member.admin);
+  if (!developer) {
+    return next(new Error("Admin doesn't exist."));
+  }
 
   // const currentYear = new Date().getFullYear();
   // console.log(
@@ -48,19 +52,6 @@ memberSchema.pre("save", async function (next) {
     return next();
   } else {
     return next(new Error("your secret length not enough or year is invalid."));
-  }
-});
-
-memberSchema.pre("find", async function (next) {
-  const query = this.getFilter();
-  const admin = await Developer.findOne();
-  if (admin.is_first_poll_enabled && !admin.is_second_poll_enabled) {
-  } else if (!admin.is_first_poll_enabled && admin.is_second_poll_enabled) {
-    query.is_eligible = true;
-    this.setQuery(query);
-    return next();
-  } else {
-    // return next(new Error("conflict in first poll and second poll."));
   }
 });
 

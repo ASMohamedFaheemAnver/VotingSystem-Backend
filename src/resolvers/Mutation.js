@@ -56,13 +56,13 @@ const Mutation = {
     return position;
   },
 
-  makeAMemberEligible: async (parent, { _id }, { request }, info) => {
+  makeAMemberEligible: async (parent, { _id, position }, { request }, info) => {
     const userData = getUserData(request);
     if (userData.category !== "developer") {
       throw new Error("only developer can update a member.");
     }
 
-    await Member.findOneAndUpdate({ _id: _id }, { is_eligible: true });
+    await Member.findOneAndUpdate({ _id: _id }, { eligible_for: position });
     return { msg: "member updated successfully." };
   },
 
@@ -118,13 +118,13 @@ const Mutation = {
     return { msg: "second poll disabled." };
   },
 
-  makeAMemberNotEligible: async (parent, { _id }, { request }, info) => {
+  makeAMemberNotEligible: async (parent, { _id, position }, { request }, info) => {
     const userData = getUserData(request);
     if (userData.category !== "developer") {
       throw new Error("only developer can update a member.");
     }
 
-    await Member.findOneAndUpdate({ _id: _id }, { is_eligible: false });
+    await Member.findOneAndUpdate({ _id: _id }, { eligible_for: undefined });
     return { msg: "member updated successfully." };
   },
 

@@ -15,8 +15,8 @@ type Mutation {
   createMember(data: MemberCreationInput!): MemberCreationMessage!
   createPosition(data: PositionCreationInput!): PositionCreationMessage!
   createVotes(data: [VoteCreationInput!]!): [VoteCreationMessage!]!
-  makeAMemberEligible(_id: ID!): Message!
-  makeAMemberNotEligible(_id: ID!): Message!
+  makeAMemberEligible(_id: ID!, position: ID!): Message!
+  makeAMemberNotEligible(_id: ID!, position: ID!): Message!
   enableFirstPoll: Message!
   disableFirstPoll: Message!
   enableSecondPoll: Message!
@@ -68,7 +68,7 @@ type Member {
   year: Int!
   gender: String!
   name: String!
-  is_eligible: Boolean!
+  eligible_for: Position
 }
 
 type MemberWithVoteInfo {
