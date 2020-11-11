@@ -7,7 +7,7 @@ const memberSchema = new Schema({
   name: { type: String, required: true },
   year: { type: Number, required: true },
   gender: { type: String, required: true },
-  eligible_for: { type: Schema.Types.ObjectId, ref: "Position" },
+  eligible_for: [{ type: Schema.Types.ObjectId, ref: "Position" }],
   admin: { type: Schema.Types.ObjectId, ref: "Developer" },
   secret: {
     type: String,

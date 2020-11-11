@@ -36,6 +36,7 @@ input MemberLoginInput {
 }
 
 input MemberCreationInput {
+  secret: String!
   name: String!
   year: Int!
   gender: String!
@@ -68,7 +69,7 @@ type Member {
   year: Int!
   gender: String!
   name: String!
-  eligible_for: Position
+  eligible_for: [Position!]!
 }
 
 type MemberWithVoteInfo {
