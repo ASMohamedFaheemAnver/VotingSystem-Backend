@@ -7,7 +7,7 @@ import Vote from "../model/vote";
 const Mutation = {
   createMember: async (
     parent,
-    { data: { year, gender, name } },
+    { data: { year, gender, name, secret } },
     { request },
     info
   ) => {
@@ -23,7 +23,8 @@ const Mutation = {
       // const members = [];
       // for (let i = 0; i < number_of_members; i++) {
       const newMember = new Member({
-        secret: Math.random().toString().slice(2, 12),
+        // secret: Math.random().toString().slice(2, 12),
+        secret: secret,
         year,
         admin: userData.encryptedId,
         gender,
@@ -62,7 +63,7 @@ const Mutation = {
       throw new Error("only developer can update a member.");
     }
 
-    await Member.findOneAndUpdate({ _id: _id }, { eligible_for: position });
+    await Member.findOneAndUpdate({ _id: _id }, { $push: { eligible_for: position } });
     return { msg: "member updated successfully." };
   },
 
@@ -124,7 +125,8 @@ const Mutation = {
       throw new Error("only developer can update a member.");
     }
 
-    await Member.findOneAndUpdate({ _id: _id }, { eligible_for: undefined });
+    await Member.findOneAndUpdate({ _id: _id }, { $pull: { eligible_for: position } }
+    );
     return { msg: "member updated successfully." };
   },
 
