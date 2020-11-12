@@ -145,7 +145,7 @@ const Mutation = {
       }
     }
 
-    if (data.length < 7) {
+    if (data.length < 8) {
       throw new Error("should vote all positions.");
     }
 
