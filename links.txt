@@ -1,0 +1,5 @@
+#Node concurrency
+https://stackoverflow.com/questions/23877696/node-js-mongodb-and-concurrency
+
+#Use of $inc
+https://stackoverflow.com/questions/8621948/using-inc-to-increment-a-document-property-with-mongoose
